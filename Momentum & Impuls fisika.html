@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="id"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Petualangan Momentum & Impuls</title>
+<style>
+:root{--bg:#fff8e7;--cd:#fff;--tx:#2d2a4a;--mu:#6b6890;--pr:#6c5ce7;--ac:#ff7675;--gr:#00b894;--yl:#fdcb6e;--bl:#74b9ff;--bd:#e8e0f5;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){color-scheme:dark;--bg:#1d1b2e;--cd:#2a2745;--tx:#f1eeff;--mu:#b5b0d6;--bd:#443f6e}}
+:root[data-theme="dark"]{color-scheme:dark;--bg:#1d1b2e;--cd:#2a2745;--tx:#f1eeff;--mu:#b5b0d6;--bd:#443f6e}
+*{box-sizing:border-box}html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.55 "Nunito","Trebuchet MS",system-ui,sans-serif}
+header{background:linear-gradient(135deg,var(--pr),#a29bfe);color:#fff;padding:14px 16px;text-align:center}
+header h1{margin:0;font-size:1.3rem}
+nav{display:flex;gap:6px;overflow-x:auto;padding:10px;background:var(--cd);border-bottom:2px solid var(--bd);position:sticky;top:env(safe-area-inset-top,0px);z-index:5}
+nav button{flex:0 0 auto;border:0;background:var(--bg);color:var(--tx);padding:9px 14px;border-radius:20px;font:inherit;font-weight:700;cursor:pointer}
+nav button.on{background:var(--pr);color:#fff}
+main{max-width:820px;margin:0 auto;padding:14px}
+.cd{background:var(--cd);border:2px solid var(--bd);border-radius:18px;padding:14px;margin:12px 0}
+.cd h2,.cd h3{margin:.2em 0}.big{font-size:2.4rem}
+.f{background:var(--bg);border-left:5px solid var(--yl);padding:8px 12px;border-radius:10px;font-weight:700;margin:8px 0;overflow-x:auto}
+.mu{color:var(--mu)}
+.btn{background:var(--pr);color:#fff;border:0;border-radius:14px;padding:10px 18px;font:inherit;font-weight:800;cursor:pointer}
+.btn.g{background:var(--gr)}.btn.o{background:var(--ac)}
+details{margin-top:8px}summary{cursor:pointer;font-weight:800;color:var(--pr)}
+.sol{background:var(--bg);border-radius:12px;padding:8px 12px;margin-top:6px}
+input,textarea{width:100%;padding:9px;border:2px solid var(--bd);border-radius:10px;background:var(--bg);color:var(--tx);font:inherit}
+label.o{display:block;padding:8px 10px;margin:5px 0;border:2px solid var(--bd);border-radius:12px;cursor:pointer}
+label.o:has(input:checked){border-color:var(--pr);background:var(--bg)}
+label.o input{width:auto;margin-right:8px}
+.tag{display:inline-block;font-size:.75rem;font-weight:800;padding:2px 9px;border-radius:10px;background:var(--bl);color:#10213a}
+.ok{color:var(--gr);font-weight:800}.no{color:var(--ac);font-weight:800}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.opts button{padding:14px;font:inherit;font-weight:800;font-size:1.1rem;border:2px solid var(--bd);border-radius:14px;background:var(--cd);color:var(--tx);cursor:pointer}
+.track{background:var(--bd);height:34px;border-radius:20px;position:relative;margin:10px 0}
+.car{position:absolute;top:-4px;font-size:1.7rem;transition:left .5s}
+.bar{height:8px;background:var(--yl);border-radius:6px;transition:width .2s}
+table{width:100%;border-collapse:collapse;font-size:.9rem}td,th{padding:6px;border-bottom:1px solid var(--bd);text-align:left}
+.sc{overflow-x:auto}
+</style></head><body>
+<header><h1>🚀 Petualangan Momentum & Impuls</h1><div>Fisika SMA Kelas XI</div></header>
+<nav id="nav"></nav><main id="m"></main>
+<script>
+// ====== PENGATURAN GURU: tempel URL Web App Google Apps Script di sini (lihat petunjuk dari Claude) ======
+var SHEET_URL="";
+// ======================================================================================================
+var $=function(s){return document.querySelector(s)};
+var TABS=[["home","🏠 Beranda"],["materi","📘 Materi"],["contoh","✏️ Contoh Soal"],["game","🎮 Game"],["latihan","📝 Latihan"],["guru","👩‍🏫 Guru"]];
+var MAT=[
+["🏃","Momentum (p)","Momentum adalah ukuran “sulitnya menghentikan” benda yang bergerak. Makin besar massa dan kecepatan, makin besar momentumnya.","p = m · v","Satuan: kg·m/s. Besaran vektor (punya arah, searah kecepatan)."],
+["💥","Impuls (I)","Impuls adalah “pukulan” gaya yang bekerja dalam selang waktu singkat, misalnya tendangan bola atau tabrakan.","I = F · Δt","Satuan: N·s. Luas di bawah grafik F–t sama dengan impuls."],
+["🔗","Hubungan Impuls–Momentum","Impuls yang diterima benda sama dengan perubahan momentumnya. Itulah mengapa airbag dan matras mengurangi cedera: waktu kontak lebih lama, gaya lebih kecil.","I = Δp = m(v₂ − v₁)","F · Δt = m·v₂ − m·v₁. Perhatikan tanda arah!"],
+["⚖️","Kekekalan Momentum","Jika tidak ada gaya luar, jumlah momentum sebelum dan sesudah tumbukan atau ledakan sama.","m₁v₁ + m₂v₂ = m₁v₁′ + m₂v₂′","Contoh: roket melesat, senapan menghentak, orang melompat dari perahu."],
+["🎱","Jenis Tumbukan","Lenting sempurna: e = 1, energi kinetik kekal. Lenting sebagian: 0 < e < 1. Tidak lenting: e = 0, benda menyatu, energi kinetik berkurang.","e = −(v₂′ − v₁′)/(v₂ − v₁)","Tidak lenting: v′ = (m₁v₁ + m₂v₂)/(m₁ + m₂). Pada semua tumbukan, momentum tetap kekal."]];
+var EX=[
+["Bola basket 0,6 kg bergerak 5 m/s. Hitung momentumnya, lalu momentum jika kecepatannya dua kali lipat.","p = m·v = 0,6 × 5 = <b>3 kg·m/s</b>.<br>Kecepatan 10 m/s: p = 0,6 × 10 = <b>6 kg·m/s</b>. Momentum sebanding dengan kecepatan, jadi ikut berlipat dua."],
+["Bola tenis 0,06 kg datang dengan kecepatan 20 m/s, dipukul balik berlawanan arah dengan kecepatan 30 m/s. Kontak raket–bola 0,02 s. Hitung impuls dan gaya rata-rata.","Ambil arah datang bola negatif: v₁ = −20, v₂ = +30.<br>I = Δp = 0,06 × (30 − (−20)) = 0,06 × 50 = <b>3 N·s</b><br>F = I/Δt = 3/0,02 = <b>150 N</b>."],
+["Senapan 4 kg menembakkan peluru 20 g dengan kecepatan 300 m/s. Berapa kecepatan hentak senapan?","Awal diam, total momentum = 0.<br>0 = m_p·v_p + m_s·v_s → v_s = −(0,02 × 300)/4 = <b>−1,5 m/s</b>.<br>Senapan terdorong 1,5 m/s berlawanan arah peluru."],
+["Gerbong 2000 kg melaju 3 m/s menabrak gerbong 1000 kg yang diam, lalu keduanya menyatu. Hitung kecepatan gabungan dan energi kinetik yang hilang.","v′ = (2000×3 + 0)/(3000) = <b>2 m/s</b>.<br>EK awal = ½·2000·3² = 9000 J; EK akhir = ½·3000·2² = 6000 J.<br>EK hilang = <b>3000 J</b> (menjadi panas dan bunyi)."],
+["Bola A 2 kg bergerak 6 m/s menumbuk bola B 4 kg yang diam secara lenting sempurna. Tentukan kecepatan masing-masing setelah tumbukan.","Momentum: 12 = 2v₁′ + 4v₂′. Lenting sempurna (e = 1): v₂′ − v₁′ = 6.<br>Substitusi: v₂′ = v₁′ + 6 → 12 = 2v₁′ + 4v₁′ + 24 → v₁′ = <b>−2 m/s</b> (memantul), v₂′ = <b>4 m/s</b>.<br>Cek: 2(−2) + 4(4) = 12 ✓."]];
+var MC=[
+["Konsep","Petinju menarik kepalanya ke belakang saat pukulan lawan datang. Analisis paling tepat mengapa cedera berkurang:",["Impuls berkurang karena momentum awal kepala berkurang","Perubahan momentum sama, tetapi waktu kontak lebih lama sehingga gaya rata-rata lebih kecil","Perubahan momentum lebih besar sehingga gaya menjadi kecil","Gaya sama, waktu lebih lama, sehingga impuls bertambah"],1,"Δp ditentukan kondisi awal–akhir. F = Δp/Δt, jadi Δt lebih lama → F lebih kecil."],
+["Konsep","Benda A (2 kg, 3 m/s) dan benda B (1 kg, 6 m/s). Bandingkan momentum dan energi kinetiknya:",["Momentum A lebih besar, EK sama","Momentum B lebih besar, EK A lebih besar","Momentum dan EK keduanya sama","Momentum sama, EK B dua kali EK A"],3,"p_A = 6, p_B = 6 (sama). EK_A = 9 J, EK_B = 18 J, jadi EK B dua kali."],
+["Konsep","Dua kereta mainan bertumbukan dan saling menempel. Jumlah EK setelah tumbukan lebih kecil. Kesimpulan yang benar:",["Momentum berkurang karena ada gesekan","Momentum dan EK sama-sama kekal","Momentum kekal, sebagian EK berubah menjadi bentuk energi lain","EK kekal, momentum berkurang"],2,"Tumbukan tidak lenting: momentum kekal (tanpa gaya luar), EK berubah menjadi panas, bunyi, dan deformasi."],
+["Konsep","Astronot yang melayang diam di luar pesawat melempar kunci inggris menjauhi pesawat. Apa yang terjadi pada astronot?",["Bergerak berlawanan arah lemparan karena total momentum awal nol harus tetap nol","Tetap diam karena tidak ada gaya luar","Bergerak searah lemparan","Berputar di tempat tanpa berpindah"],0,"Kekekalan momentum: m_kunci·v_kunci + m_astronot·v_astronot = 0, sehingga arahnya berlawanan."],
+["Hitungan","Gaya pada benda 4 kg (awal diam) berubah dari 0 hingga 40 N dalam 0,5 s lalu turun lagi ke 0 dalam 0,5 s (grafik F–t berbentuk segitiga). Kecepatan akhir benda:",["2,5 m/s","5 m/s","10 m/s","20 m/s"],1,"Impuls = luas segitiga = ½ × 1 × 40 = 20 N·s. v = I/m = 20/4 = 5 m/s."],
+["Numerasi","⚽ Rani menendang bola 0,4 kg yang diam; kakinya menyentuh bola 0,05 s dan bola melaju 20 m/s. Dodi menendang bola sama; kontak 0,04 s, bola melaju 24 m/s. Berapa selisih gaya rata-rata tendangan Dodi dan Rani?",["40 N","80 N","160 N","240 N"],1,"F_Rani = 0,4×20/0,05 = 160 N. F_Dodi = 0,4×24/0,04 = 240 N. Selisih = 80 N."],
+["Numerasi","🛶 Bimo (40 kg) berdiri di atas perahu 160 kg yang diam di danau, lalu melompat ke dermaga dengan kecepatan 2 m/s. Kecepatan perahu sesaat setelah itu:",["0,5 m/s searah lompatan","0,5 m/s berlawanan arah lompatan","2 m/s berlawanan arah lompatan","8 m/s berlawanan arah lompatan"],1,"0 = 40(2) + 160·v → v = −0,5 m/s (berlawanan arah)."],
+["Hitungan","Peluru 10 g menancap pada balok kayu 1,99 kg yang diam di bidang licin. Balok bersama peluru bergerak 2 m/s. Kecepatan peluru sebelum mengenai balok:",["200 m/s","300 m/s","400 m/s","800 m/s"],2,"0,01·v = (0,01 + 1,99)·2 = 4 → v = 400 m/s."],
+["Numerasi","🚗 Mobil 1000 kg melaju 20 m/s ke timur menabrak head-on truk 4000 kg yang melaju 5 m/s ke barat, lalu keduanya menyatu. Keadaan setelah tumbukan:",["Bergerak 8 m/s ke timur","Bergerak 8 m/s ke barat","Bergerak 3 m/s ke barat","Berhenti (kecepatan 0)"],3,"Timur positif: 1000×20 + 4000×(−5) = 0, jadi v′ = 0. Momentum total nol."],
+["Hitungan","Bola karet 0,2 kg dijatuhkan dari ketinggian 1,8 m dan memantul setinggi 0,8 m (g = 10 m/s²). Besar impuls dari lantai pada bola:",["0,4 N·s","1,0 N·s","2,0 N·s","4,0 N·s"],2,"v sebelum = √(2·10·1,8) = 6 m/s ke bawah; v sesudah = √(2·10·0,8) = 4 m/s ke atas. I = 0,2(4 + 6) = 2 N·s."]];
+var ES=[
+["Hitungan","🏐 Pada pertandingan voli, Sari melakukan smash: bola 0,27 kg datang 10 m/s lalu dipukul balik berlawanan arah dengan 20 m/s. Kontak tangan–bola 0,03 s. Hitung impuls dan gaya rata-rata pada bola.",270,"N","I = 0,27 × (20 + 10) = 8,1 N·s; F = 8,1/0,03 = 270 N."],
+["Numerasi","⛸️ Dina (50 kg) dan adiknya Bimo (30 kg) diam di atas es, saling berpegangan lalu saling mendorong. Dina meluncur 1,5 m/s ke kanan. Tentukan besar kecepatan Bimo dan jelaskan mengapa Bimo bergerak ke kiri.",2.5,"m/s","0 = 50(1,5) + 30·v → v = −2,5 m/s. Arah berlawanan karena momentum total harus tetap nol."],
+["Numerasi","🚘 Uji tabrak: mobil 1200 kg melaju 15 m/s menabrak dinding dan berhenti. Tanpa airbag, waktu berhenti 0,1 s; dengan airbag 0,3 s. Hitung selisih gaya rata-rata pada penumpang-mobil (anggap gaya pada mobil) di kedua kasus dan jelaskan manfaat airbag.",120000,"N","Δp = 1200×15 = 18000 N·s. F₁ = 180000 N, F₂ = 60000 N, selisih 120000 N. Waktu kontak lebih lama → gaya lebih kecil."],
+["Numerasi","🔬 Proyek sains: peluru mainan 50 g ditembakkan ke balok plastisin 450 g di meja licin dan menancap; keduanya bergerak 3 m/s. Hitung energi kinetik yang hilang (J) dan jelaskan ke mana energi itu pergi.",20.25,"J","v₀ = 0,5×3/0,05 = 30 m/s. EK awal = 22,5 J, EK akhir = 2,25 J. Hilang = 20,25 J (panas, bunyi, deformasi)."],
+["Hitungan","🎳 Bola bowling 3 kg bergerak 4 m/s menumbuk bola 1 kg yang diam secara lenting sempurna. Tentukan kecepatan bola 1 kg sesudah tumbukan dan buktikan momentum kekal.",6,"m/s","e = 1: v₂′ − v₁′ = 4; 12 = 3v₁′ + v₂′ → v₁′ = 2, v₂′ = 6 m/s. Cek: 3(2) + 1(6) = 12 ✓."]];
+function pane(id){var h=$("#m");
+ if(id=="home")h.innerHTML='<div class="cd" style="text-align:center"><div class="big">🚀🎱🚗💥</div><h2>Selamat datang, Fisikawan Cilik!</h2><p>Belajar momentum dan impuls lewat materi, contoh soal, game, dan latihan. Pilih menu di atas ya!</p><svg viewBox="0 0 320 90" width="100%" style="max-width:420px"><rect x="0" y="70" width="320" height="6" rx="3" fill="#b2bec3"/><g><rect x="30" y="38" width="70" height="28" rx="8" fill="#ff7675"/><circle cx="48" cy="68" r="9" fill="#2d3436"/><circle cx="84" cy="68" r="9" fill="#2d3436"/><text x="40" y="58" font-size="14" fill="#fff">m₁→v₁</text></g><text x="150" y="40" font-size="30">💥</text><g><rect x="210" y="38" width="70" height="28" rx="8" fill="#74b9ff"/><circle cx="228" cy="68" r="9" fill="#2d3436"/><circle cx="264" cy="68" r="9" fill="#2d3436"/><text x="222" y="58" font-size="14" fill="#10213a">m₂</text></g></svg><p class="mu">Tips: p = m·v dan I = F·Δt = Δp</p></div>';
+ if(id=="materi")h.innerHTML=MAT.map(function(x){return '<div class="cd"><span class="big">'+x[0]+'</span><h2>'+x[1]+'</h2><p>'+x[2]+'</p><div class="f">'+x[3]+'</div><p class="mu">'+x[4]+'</p></div>'}).join("");
+ if(id=="contoh")h.innerHTML='<div class="cd"><h2>✏️ 5 Contoh Soal Esai</h2><p class="mu">Coba kerjakan dulu di buku, baru buka pembahasan.</p></div>'+EX.map(function(x,i){return '<div class="cd"><span class="tag">Contoh '+(i+1)+'</span><p>'+x[0]+'</p><details><summary>Lihat pembahasan</summary><div class="sol">'+x[1]+'</div></details></div>'}).join("");
+ if(id=="game")gameInit();if(id=="latihan")latihan();if(id=="guru")guru();}
+function go(id){document.querySelectorAll("nav button").forEach(function(b){b.classList.toggle("on",b.dataset.i==id)});pane(id);scrollTo(0,0)}
+$("#nav").innerHTML=TABS.map(function(t){return '<button data-i="'+t[0]+'" onclick="go(\''+t[0]+'\')">'+t[1]+'</button>'}).join("");
+// ===== GAME =====
+var G;function R(a){return a[Math.floor(Math.random()*a.length)]}
+function shuf(a){return a.sort(function(){return Math.random()-.5})}
+function gen(){var t=R([0,1,2,3]),q,a,u;
+ if(t==0){var m=R([2,3,4,5,6,8]),v=R([2,3,5,6,10,12]);q="Momentum benda "+m+" kg yang bergerak "+v+" m/s = … kg·m/s";a=m*v}
+ if(t==1){var F=R([10,20,40,50]),d=R([2,3,4,5]);q="Gaya "+F+" N bekerja selama "+d+" s. Impulsnya = … N·s";a=F*d}
+ if(t==2){var v1=R([4,6,8,10]);q="Dua benda bermassa sama bertumbukan tidak lenting: benda 1 bergerak "+v1+" m/s, benda 2 diam. Kecepatan gabungan = … m/s";a=v1/2}
+ if(t==3){var m2=R([0.2,0.5,1,2]),x=R([4,6,8]),y=R([2,4]);q="Bola "+m2+" kg datang "+x+" m/s, dipantulkan balik "+y+" m/s. Besar perubahan momentum = … kg·m/s";a=+(m2*(x+y)).toFixed(2)}
+ var o=[a],k=0;while(o.length<4){var c=+(a+R([-2,-1,1,2,3,4,-3])*(a>5?2:1)*R([1,.5])).toFixed(2);if(c>0&&o.indexOf(c)<0)o.push(c)}
+ return{q:q,a:a,o:shuf(o)}}
+function gameInit(){G={n:0,ok:0,s:0,t:15,x:null};$("#m").innerHTML='<div class="cd" style="text-align:center"><div class="big">🏎️</div><h2>Balap Momentum</h2><p>Jawab 10 soal kilat secepat mungkin. Setiap jawaban benar membuat mobilmu melaju! Makin cepat, makin banyak poin.</p><button class="btn g" onclick="gNext()">Mulai Balapan!</button></div>'}
+function gNext(){clearInterval(G.iv);if(G.n>=10)return gEnd();G.q=gen();G.t=15;G.n++;
+ $("#m").innerHTML='<div class="cd"><div>Soal '+G.n+'/10 · Skor <b>'+G.s+'</b> · ⏱ <b id="tm">15</b> s</div><div class="bar" id="br" style="width:100%"></div><div class="track"><span class="car" id="car" style="left:'+G.ok*9+'%">🏎️</span><span style="position:absolute;right:6px;top:2px">🏁</span></div><h3>'+G.q.q+'</h3><div class="opts">'+G.q.o.map(function(o){return '<button onclick="gAns('+o+')">'+String(o).replace(".",",")+'</button>'}).join("")+'</div></div>';
+ G.iv=setInterval(function(){G.t--;$("#tm").textContent=G.t;$("#br").style.width=G.t/15*100+"%";if(G.t<=0){clearInterval(G.iv);gAns(null)}},1000)}
+function gAns(v){clearInterval(G.iv);var ok=v===G.q.a;if(ok){G.ok++;G.s+=10+G.t}
+ $("#m").innerHTML='<div class="cd" style="text-align:center"><div class="track"><span class="car" style="left:'+G.ok*9+'%">'+(ok?"🏎️💨":"🏎️")+'</span><span style="position:absolute;right:6px;top:2px">🏁</span></div><div class="big">'+(ok?"🎉":"😅")+'</div><h3 class="'+(ok?"ok":"no")+'">'+(ok?"Benar! +"+(10+G.t):"Jawaban benar: "+String(G.q.a).replace(".",","))+'</h3><button class="btn" onclick="gNext()">'+(G.n>=10?"Lihat hasil":"Soal berikutnya ➜")+'</button></div>'}
+function gEnd(){var m=G.ok>=8?"🏆 Juara Fisika!":G.ok>=5?"🥈 Pembalap Hebat!":"🥉 Ayo latihan lagi!";$("#m").innerHTML='<div class="cd" style="text-align:center"><div class="big">'+m+'</div><h2>Skor: '+G.s+'</h2><p>Benar '+G.ok+' dari 10 soal</p><button class="btn g" onclick="gameInit()">Main lagi</button></div>'}
+// ===== LATIHAN =====
+var L="ABCD";
+function latihan(){var h='<div class="cd"><h2>📝 Latihan HOTS (C4)</h2><p class="mu">10 pilihan ganda (6 poin) + 5 esai (8 poin). Gunakan g = 10 m/s². Isi nama dulu ya.</p><input id="nm" placeholder="Nama lengkap"><br><br><input id="kl" placeholder="Kelas (contoh: XI IPA 1)"></div>';
+ h+=MC.map(function(x,i){return '<div class="cd"><span class="tag">PG '+(i+1)+' · '+x[0]+'</span><p>'+x[1]+'</p>'+x[2].map(function(o,j){return '<label class="o"><input type="radio" name="q'+i+'" value="'+j+'">'+L[j]+'. '+o+'</label>'}).join("")+'<div id="r'+i+'"></div></div>'}).join("");
+ h+=ES.map(function(x,i){return '<div class="cd"><span class="tag">Esai '+(i+1)+' · '+x[0]+'</span><p>'+x[1]+'</p><textarea id="w'+i+'" rows="3" placeholder="Tulis langkah pengerjaanmu…"></textarea><br><br><input id="a'+i+'" inputmode="decimal" placeholder="Jawaban akhir ('+x[3]+')"><div id="e'+i+'"></div></div>'}).join("");
+ h+='<div class="cd" style="text-align:center"><button class="btn o" onclick="kirim()">Kirim Jawaban ✅</button><div id="hs"></div></div>';$("#m").innerHTML=h}
+function kirim(){var nm=$("#nm").value.trim(),kl=$("#kl").value.trim();if(!nm||!kl){alert("Isi nama dan kelas dulu ya.");return}
+ var pg=0,es=0,det=[];
+ MC.forEach(function(x,i){var s=document.querySelector('input[name=q'+i+']:checked'),v=s?+s.value:-1,ok=v==x[4];if(ok)pg++;det.push(v<0?"-":L[v]);
+  $("#r"+i).innerHTML='<p class="'+(ok?"ok":"no")+'">'+(ok?"✔ Benar":"✘ Jawaban benar: "+L[x[4]])+'</p><div class="sol">'+x[5]+'</div>'});
+ ES.forEach(function(x,i){var v=parseFloat(($("#a"+i).value||"").replace(",","."));var ok=!isNaN(v)&&Math.abs(v-x[2])<=Math.abs(x[2])*0.01;if(ok)es++;det.push(isNaN(v)?"-":v);
+  $("#e"+i).innerHTML='<p class="'+(ok?"ok":"no")+'">'+(ok?"✔ Jawaban akhir tepat":"✘ Jawaban akhir: "+String(x[2]).replace(".",",")+" "+x[3])+'</p><div class="sol">'+x[4]+'</div>'});
+ var tot=pg*6+es*8,rec={nama:nm,kelas:kl,pg:pg,esaiBenar:es,nilai:tot,jawabanPG:det.slice(0,10).join(""),jawabanEsai:det.slice(10).join(" | "),langkahEsai:ES.map(function(_,i){return $("#w"+i).value}).join(" || "),waktu:new Date().toLocaleString("id-ID")};
+ $("#hs").innerHTML='<div class="big">'+(tot>=75?"🌟":"💪")+'</div><h2>Nilai: '+tot+'/100</h2><p>PG benar '+pg+'/10 · Esai (jawaban akhir) '+es+'/5</p><p class="mu" id="st">Menyimpan…</p>';
+ simpan(rec).then(function(r){$("#st").textContent=r}) ;$("#hs").scrollIntoView({behavior:"smooth"})}
+function simpan(rec){var msg=[],jobs=[];
+ if(SHEET_URL)jobs.push(fetch(SHEET_URL,{method:"POST",mode:"no-cors",headers:{"Content-Type":"text/plain"},body:JSON.stringify(rec)}).then(function(){msg.push("terkirim ke Google Sheet")}).catch(function(){msg.push("gagal ke Google Sheet")}));
+ jobs.push((window.claude?claude.use("db"):Promise.resolve(null)).then(function(db){if(!db)return;return db.collection("hasil").doc(Date.now()+"-"+Math.random().toString(36).slice(2,6)).set(rec).then(function(){msg.push("tersimpan di data guru")})}).catch(function(){msg.push("tidak dapat menyimpan di data guru")}));
+ return Promise.all(jobs).then(function(){return msg.length?"✅ Nilai "+msg.join(" & "):"Nilai hanya tampil di layar ini (penyimpanan belum aktif)."})}
+// ===== GURU =====
+function guru(){$("#m").innerHTML='<div class="cd"><h2>👩‍🏫 Rekap Nilai Siswa</h2><p class="mu">Rekap otomatis dari data tersimpan. Unduh CSV untuk dibuka di Google Sheet. Jika SHEET_URL sudah diisi, nilai juga masuk langsung ke Google Sheet.</p><div id="rk">Memuat…</div></div>';
+ (window.claude?claude.use("db"):Promise.resolve(null)).then(function(db){if(!db){$("#rk").textContent="Rekap hanya dapat dilihat oleh guru pemilik halaman ini.";return}
+  return db.collection("hasil").get().then(function(s){var d=s.docs.map(function(x){return x.data()});if(!d.length){$("#rk").textContent="Belum ada data nilai.";return}
+   d.sort(function(a,b){return (a.kelas+a.nama).localeCompare(b.kelas+b.nama)});window._d=d;
+   $("#rk").innerHTML='<button class="btn g" onclick="csv()">⬇ Unduh CSV</button><div class="sc"><table><tr><th>Nama</th><th>Kelas</th><th>PG</th><th>Esai</th><th>Nilai</th><th>Waktu</th></tr>'+d.map(function(r){return '<tr><td>'+esc(r.nama)+'</td><td>'+esc(r.kelas)+'</td><td>'+r.pg+'</td><td>'+r.esaiBenar+'</td><td><b>'+r.nilai+'</b></td><td>'+esc(r.waktu)+'</td></tr>'}).join("")+'</table></div><p class="mu">Rata-rata kelas: '+(d.reduce(function(a,r){return a+r.nilai},0)/d.length).toFixed(1)+'</p>'})}).catch(function(){$("#rk").textContent="Data belum dapat dimuat."})}
+function esc(s){var e=document.createElement("div");e.textContent=s==null?"":s;return e.innerHTML}
+function csv(){var k=["nama","kelas","pg","esaiBenar","nilai","jawabanPG","jawabanEsai","langkahEsai","waktu"];var t=k.join(",")+"\n"+window._d.map(function(r){return k.map(function(c){return '"'+String(r[c]==null?"":r[c]).replace(/"/g,'""')+'"'}).join(",")}).join("\n");
+ claude.use("downloads").then(function(d){if(d)d.save({filename:"nilai-momentum-impuls.csv",data:"\ufeff"+t})}).catch(function(){})}
+go("home");
+</script></body></html>
